@@ -23,18 +23,9 @@ const ProjectCards = () => {
     autoplay: true,
     autoplaySpeed: 3000,
     arrows: false,
-    pauseOnHover: false,
-    pauseOnFocus: false,
-    cssEase: "linear",
     responsive: [
-      {
-        breakpoint: 1024,
-        settings: { slidesToShow: Math.min(2, slidesToShow) },
-      },
-      {
-        breakpoint: 640,
-        settings: { slidesToShow: 1 },
-      },
+      { breakpoint: 1024, settings: { slidesToShow: 2 } },
+      { breakpoint: 640, settings: { slidesToShow: 1 } },
     ],
   };
 
@@ -42,9 +33,7 @@ const ProjectCards = () => {
     const load = async () => {
       setLoading(true);
       const res = await GetProjects();
-      if (res?.success) {
-        setProjects(res.data || []);
-      }
+      if (res?.success) setProjects(res.data || []);
       setLoading(false);
     };
     load();
@@ -52,9 +41,9 @@ const ProjectCards = () => {
 
   return (
     <div className="w-full bg-white py-12 overflow-hidden">
-      {
-        loading && <WebsiteLoader/>
-      }
+      {loading && <WebsiteLoader />}
+
+      {/* Header */}
       <div className="flex justify-between items-center px-6 md:px-20">
         <h2
           className="text-black text-xl md:text-3xl font-semibold font-['Montserrat']"
@@ -66,46 +55,55 @@ const ProjectCards = () => {
         >
           Real Stories, Real Growth
         </h2>
-        <a
-          className="text-black cursor-pointer text-sm md:text-base font-normal font-['Poppins'] underline"
-        >
-          View All 
-        </a>
+
+        <span className="text-black text-sm md:text-base font-['Poppins'] underline cursor-pointer">
+          View All
+        </span>
       </div>
 
+      {/* Slider */}
       <div className="mt-8 px-4 md:px-20">
         <Slider {...settings}>
-          {projects?.map((card, index) => (
+          {projects.map((card, index) => (
             <div key={index} className="px-4">
-              <div className="rounded-2xl overflow-hidden transition-all duration-500 bg-stone-300 h-[500px] flex flex-col items-center justify-start">
-                {/* Image Section (fixed size, no cropping) */}
-                <div className="w-[90%] h-64 mt-6 rounded-2xl overflow-hidden relative bg-white flex items-center justify-center">
-                  <img
-                    src={card.image}
-                    alt={card.name}
-                    className="max-w-full cursor-pointer max-h-full object-contain"
-                  />
-                  <div className="absolute bottom-4 left-4 text-sm underline text-black font-poppins">
-                    Read More 
-                  </div>
-                </div>
+              <div className="relative rounded-2xl bg-[#004180] text-white min-h-[500px] flex flex-col">
 
-                {/* Text Section */}
-                <div className="w-full px-4 mt-6 text-left">
-                  <div
-                    className="text-black text-2xl font-semibold font-['Montserrat']"
+                
+
+                {/* Image */}
+              <div className="w-[90%] h-60 mt-6 mx-auto rounded-2xl bg-white flex items-center justify-center overflow-hidden">
+  <img
+    src={card.image}
+    alt={card.name}
+    className="w-full h-full object-contain"
+  />
+</div>
+
+
+                {/* Content */}
+                <div className="px-5 mt-6 flex-1">
+                  <h3
+                    className="text-xl md:text-2xl font-semibold font-['Montserrat']"
                     style={{
                       fontVariant: "small-caps",
-                      lineHeight: "100%",
                       letterSpacing: "-0.02em",
                     }}
                   >
                     {card.name}
-                  </div>
-                  <p className="text-black text-sm font-normal font-['Poppins'] mt-2">
-                    {card.description?.substring(0, 300)}
+                  </h3>
+
+                  <p className="text-sm font-['Poppins'] mt-2 line-clamp-4 opacity-90">
+                    {card.description}
                   </p>
                 </div>
+
+                {/* Read More */}
+                <div className="px-5 pb-6">
+                  <button className="mt-4 inline-flex items-center gap-2 text-sm font-['Poppins'] bg-white text-[#004180] px-4 py-2 rounded-full hover:bg-gray-100 transition">
+                    Read More →
+                  </button>
+                </div>
+
               </div>
             </div>
           ))}

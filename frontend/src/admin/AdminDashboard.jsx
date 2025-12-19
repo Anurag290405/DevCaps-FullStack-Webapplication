@@ -19,7 +19,6 @@ import Logout from '../API\'s/AdminAPI/Logout';
 
 const navigationItems = [
   { id: 'projects', label: 'Projects', icon: Briefcase },
-  { id: 'clients', label: 'Clients', icon: Users },
   { id: 'contact', label: 'Contact Submissions', icon: Mail },
   { id: 'newsletter', label: 'Newsletter Subscribers', icon: Mail },
   { id: 'success-stories', label: 'Success Stories', icon: Mail },
@@ -54,8 +53,6 @@ export function AdminDashboard() {
     switch (activeSection) {
       case 'projects':
         return <ProjectsManager />;
-      case 'clients':
-        return <ProjectsManager />; // Clients list not implemented
       case 'contact':
         return <ContactQueries />;
       case 'newsletter':

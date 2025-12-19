@@ -1,56 +1,80 @@
 import { useState } from "react";
-import { toast } from "sonner";
 import { API_URL, contact as contactEndpoint } from "../../NwConfig";
 
 const heroContent = {
-  title: "Welcome To DevCaps",
+  title: "Welcome to DevCaps",
   description:
-    "Office ipsum you must be muted. Needed globalize be dunder hit customer game discussion. Define where company asserts hanging agile. Also old after invested regroup wanted post ballpark base. Didn't the game across latest clean. Incompetent teeth power but our. People can say dangerous money agile. Agile design evals based so T-shaped monday evening please. Zoom innovation alarming looking model time. Has performance running standup heads-up cob rat. As don't reality scout-added matter developing one before crank.",
+    "DevCaps is a dynamic innovation and incubation platform designed to empower developers, startups, and student entrepreneurs. We provide mentorship, technical guidance, industry exposure, and collaborative opportunities to transform ideas into scalable solutions. From early-stage validation to market-ready products, DevCaps supports innovation at every step."
 };
+
 
 const Hero = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    message: ""
+    message: "",
   });
+
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!formData.name || !formData.email || !formData.phone) {
-      toast.error("Please fill in all required fields");
+      setError("Please fill in all required fields");
       return;
     }
 
-    setLoading(true);
-    const res = await fetch(API_URL + contactEndpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    }).then(r => r.json());
-    setLoading(false);
+    if (loading) return;
 
-    if (res?.success) {
-      toast.success("Query submitted successfully!");
-      setFormData({ name: "", email: "", phone: "", message: "" });
-    } else {
-      toast.error(res?.message || "Failed to submit query");
+    setLoading(true);
+    setSuccess("");
+    setError("");
+
+    try {
+      const res = await fetch(`${API_URL}${contactEndpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      }).then((r) => r.json());
+
+      if (res?.success) {
+        setSuccess("Query submitted successfully");
+        setFormData({ name: "", email: "", phone: "", message: "" });
+
+        setTimeout(() => {
+          setSuccess("");
+        }, 5000);
+      } else {
+        setError(res?.message || "Failed to submit query");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="relative w-full h-auto min-h-[600px] lg:h-[650px] overflow-hidden bg-neutral-100">
-      <div className="absolute inset-0 flex flex-col lg:flex-row items-center lg:items-center justify-between gap-8 lg:gap-12 px-6 lg:px-16 py-10 lg:py-16">
-        {/* Left side - Contact Form */}
+    <div className="relative w-full min-h-[600px] lg:min-h-[650px] bg-neutral-100 overflow-hidden">
+      <div className="relative max-w-[1512px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-10 px-6 lg:px-16 py-10 lg:py-16">
+
+        {/* Left - Contact Form */}
         <div className="w-full lg:w-5/12 bg-white rounded-2xl p-8 shadow-xl border border-gray-200">
-          <h3 className="text-2xl font-bold text-gray-800 mb-6">Drop Your Query</h3>
+          <h3 className="text-2xl font-bold text-gray-800 mb-6">
+            Drop Your Query
+          </h3>
+
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -65,6 +89,7 @@ const Hero = () => {
                 className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400"
               />
             </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -79,6 +104,7 @@ const Hero = () => {
                   className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400"
                 />
               </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Contact No.
@@ -93,6 +119,7 @@ const Hero = () => {
                 />
               </div>
             </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Message (optional)
@@ -106,17 +133,31 @@ const Hero = () => {
                 className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
               />
             </div>
+
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2"
+              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300"
             >
               {loading ? "Sending..." : "Send query →"}
             </button>
+
+            {/* Popup Messages */}
+            {success && (
+              <div className="mt-3 text-sm text-green-700 bg-green-100 px-4 py-2 rounded-md">
+                {success}
+              </div>
+            )}
+
+            {error && (
+              <div className="mt-3 text-sm text-red-700 bg-red-100 px-4 py-2 rounded-md">
+                {error}
+              </div>
+            )}
           </form>
         </div>
 
-        {/* Right side - Welcome Text */}
+        {/* Right - Text */}
         <div className="w-full lg:w-6/12 flex flex-col justify-center text-left">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-gray-900">
             {heroContent.title}
@@ -134,7 +175,6 @@ const Hero = () => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };
