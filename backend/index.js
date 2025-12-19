@@ -19,7 +19,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:5173"],
+  origin: ["http://localhost:3000", "http://localhost:5173" ,"https://devcapsbyanurag.vercel.app" , "https://devcaps.onrender.com"],
   credentials: true
 }));
 
