@@ -1,6 +1,5 @@
 ﻿import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
-import { toast } from "sonner";
 import GetEmails from "../API's/NewsAPI/GetEmails";
 import WebsiteLoader from "../Loader/WebsiteLoader";
 import * as XLSX from "xlsx";
@@ -24,14 +23,14 @@ export function NewsletterManager() {
 
   const handleExportSubscribers = (data, filename) => {
     if (!Array.isArray(data) || data.length === 0) {
-      toast.warning("No subscribers to export");
+      alert("No subscribers to export");
       return;
     }
     const ws = XLSX.utils.json_to_sheet(data.map((sub) => ({ email: sub.email })));
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Subscribers");
     XLSX.writeFile(wb, filename);
-    toast.success("Exported successfully!");
+    alert("Exported successfully!");
   };
 
   return (

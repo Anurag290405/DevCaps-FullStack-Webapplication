@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Plus, Trash2, Save } from "lucide-react";
-import { toast } from "sonner";
+// Toast removed per request; using alerts instead
 import WebsiteLoader from "../Loader/WebsiteLoader";
 import GetProjects from "../API's/ProjectAPI/GetProjects";
 import CreateProject from "../API's/ProjectAPI/CreateProject";
 import UpdateProject from "../API's/ProjectAPI/UpdateProject";
 import DeleteProject from "../API's/ProjectAPI/DeleteProject";
+import { API_URL } from "../NwConfig";
 import ImageCropper from "./Modals/ImageCropper";
 
 export default function ProjectsManager() {
@@ -14,6 +15,15 @@ export default function ProjectsManager() {
   const [cropperOpen, setCropperOpen] = useState(false);
   const [selectedImageSrc, setSelectedImageSrc] = useState(null);
   const [cropTargetProjectId, setCropTargetProjectId] = useState(null);
+
+  // Simple alert-based notifications (toast removed per request)
+  const notifySuccess = (message) => {
+    alert(message);
+  };
+
+  const notifyError = (message) => {
+    alert(message);
+  };
 
   const toViewModel = (project) => ({
     ...project,
@@ -29,7 +39,7 @@ export default function ProjectsManager() {
       if (res?.success) {
         setProjects(res.data.map((p) => toViewModel(p)));
       } else {
-        toast.error(res?.message || "Failed to load projects");
+        notifyError(res?.message || "Failed to load projects");
       }
       setLoading(false);
     };
@@ -56,13 +66,13 @@ export default function ProjectsManager() {
     const file = e.target.files[0];
     if (!file) return;
     if (file.size > 4 * 1024 * 1024) {
-      toast.error("Image size should be less than 4MB");
+      notifyError("Image size should be less than 4MB");
       return;
     }
     
     // Check file type
     if (!file.type.startsWith("image/")) {
-      toast.error("Please select a valid image file (jpg, png, etc.)");
+      notifyError("Please select a valid image file (jpg, png, etc.)");
       return;
     }
     
@@ -72,8 +82,16 @@ export default function ProjectsManager() {
       setCropTargetProjectId(id);
       setCropperOpen(true);
     } catch (error) {
-      toast.error("Failed to read image");
+      notifyError("Failed to read image");
     }
+  };
+
+  // Build an absolute image URL for previews (supports relative API paths, blob URLs, or full URLs)
+  const buildImageSrc = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:")) return path;
+    const base = import.meta.env.VITE_API_URL || API_URL || "http://localhost:3000";
+    return `${base}/${path.replace(/^\//, "")}`;
   };
 
   const handleCropComplete = (croppedBlob) => {
@@ -99,7 +117,8 @@ export default function ProjectsManager() {
       file: null,
       changes: true
     };
-    setProjects((prev) => [...prev, newProject]);
+    // Prepend so newest project appears at the top of the list
+    setProjects((prev) => [newProject, ...prev]);
   };
 
   const deleteProject = async (id) => {
@@ -109,7 +128,7 @@ export default function ProjectsManager() {
     // remove unsaved project locally only
     if (!project || `${project._id}`.startsWith("temp")) {
       setProjects((prev) => prev.filter((p) => p._id !== id));
-      toast.success("Project deleted");
+      notifySuccess("Project deleted");
       return;
     }
 
@@ -119,9 +138,9 @@ export default function ProjectsManager() {
 
     if (res?.success) {
       setProjects((prev) => prev.filter((p) => p._id !== id));
-      toast.success("Project deleted");
+      notifySuccess("Project deleted");
     } else {
-      toast.error(res?.message || "Failed to delete project");
+      notifyError(res?.message || "Failed to delete project");
     }
   };
 
@@ -134,7 +153,9 @@ export default function ProjectsManager() {
         `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/upload`,
         {
           method: "POST",
-          body: formData
+          body: formData,
+          // include auth cookie for protected upload route
+          credentials: "include"
         }
       );
 
@@ -153,7 +174,7 @@ export default function ProjectsManager() {
   const saveProject = async (id) => {
     const project = projects.find((p) => p._id === id);
     if (!project?.name || !project?.description || !project?.image_url) {
-      toast.error("Please fill all fields");
+      notifyError("Please fill all fields");
       return;
     }
 
@@ -188,13 +209,13 @@ export default function ProjectsManager() {
         setProjects((prev) =>
           prev.map((p) => (p._id === id || `${p._id}` === `${id}` ? { ...saved } : p))
         );
-        toast.success("Project saved successfully");
+        notifySuccess("Project saved successfully");
       } else {
-        toast.error(res?.message || "Failed to save project");
+        notifyError(res?.message || "Failed to save project");
       }
     } catch (error) {
       setLoading(false);
-      toast.error(error.message || "Failed to save project");
+      notifyError(error.message || "Failed to save project");
     }
   };
 
@@ -230,7 +251,7 @@ export default function ProjectsManager() {
                 <div className="relative group">
                   {project.image_url ? (
                     <img
-                      src={project.image_url}
+                      src={buildImageSrc(project.image_url)}
                       alt={project.name}
                       className="w-full h-48 object-cover rounded-lg"
                     />

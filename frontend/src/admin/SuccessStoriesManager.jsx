@@ -1,9 +1,10 @@
 ﻿import { useEffect, useState } from "react";
 import { Trash2, Plus, Save } from "lucide-react";
-import { toast } from "sonner";
+// Toast removed per request; using alerts instead
 import InsertSuccessData from "../API's/SuccessStoriesAPI/InsertSuccessData";
 import GetSuccessData from "../API's/SuccessStoriesAPI/GetSuccessData";
 import parseImagePath from "./Modals/parseImagePath";
+import { API_URL } from "../NwConfig";
 import WebsiteLoader from "../Loader/WebsiteLoader";
 import ImageCropper from "./Modals/ImageCropper";
 
@@ -13,6 +14,15 @@ export default function SuccessStoriesManager() {
   const [cropperOpen, setCropperOpen] = useState(false);
   const [selectedImageSrc, setSelectedImageSrc] = useState("");
   const [cropTargetStoryId, setCropTargetStoryId] = useState(null);
+
+  // Simple alert-based notifications (toast removed per request)
+  const notifySuccess = (message) => {
+    alert(message);
+  };
+
+  const notifyError = (message) => {
+    alert(message);
+  };
 
   const toViewModel = (story) => ({
     ...story,
@@ -28,7 +38,7 @@ export default function SuccessStoriesManager() {
       if (res?.success) {
         setStories(res.data.map((s) => toViewModel(s)));
       } else {
-        toast.error(res?.message || "Failed to load success stories");
+        notifyError(res?.message || "Failed to load success stories");
       }
       setLoading(false);
     };
@@ -57,12 +67,12 @@ export default function SuccessStoriesManager() {
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
-      toast.error("Please select a valid image file");
+      notifyError("Please select a valid image file");
       return;
     }
 
     if (file.size > 4 * 1024 * 1024) {
-      toast.error("Image size should be less than 4MB");
+      notifyError("Image size should be less than 4MB");
       return;
     }
 
@@ -75,8 +85,16 @@ export default function SuccessStoriesManager() {
       };
       reader.readAsDataURL(file);
     } catch (error) {
-      toast.error("Failed to read image");
+      notifyError("Failed to read image");
     }
+  };
+
+  // Build an absolute image URL for previews (supports relative API paths, blob URLs, or full URLs)
+  const buildImageSrc = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:")) return path;
+    const base = import.meta.env.VITE_API_URL || API_URL || "http://localhost:3000";
+    return `${base}/${path.replace(/^\//, "")}`;
   };
 
   const handleCropComplete = (blob) => {
@@ -92,7 +110,7 @@ export default function SuccessStoriesManager() {
       setCropperOpen(false);
       setSelectedImageSrc("");
       setCropTargetStoryId(null);
-      toast.success("Image cropped successfully");
+      notifySuccess("Image cropped successfully");
     }
   };
 
@@ -106,7 +124,8 @@ export default function SuccessStoriesManager() {
       file: null,
       changes: true
     };
-    setStories((prev) => [...prev, newStory]);
+    // Prepend so newest story appears first
+    setStories((prev) => [newStory, ...prev]);
   };
 
   const deleteStory = async (id) => {
@@ -115,14 +134,13 @@ export default function SuccessStoriesManager() {
     const story = stories.find((s) => s._id === id);
     if (!story || `${story._id}`.startsWith("temp")) {
       setStories((prev) => prev.filter((s) => s._id !== id));
-      toast.success("Story deleted");
-      return;
-    }
+    notifySuccess("Story deleted");
+    return;
+  }
 
-    setLoading(true);
-    setStories((prev) => prev.filter((s) => s._id !== id));
-    toast.success("Story deleted");
-    setLoading(false);
+  setLoading(true);
+  setStories((prev) => prev.filter((s) => s._id !== id));
+  notifySuccess("Story deleted");
   };
 
   const uploadImage = async (blob) => {
@@ -134,7 +152,9 @@ export default function SuccessStoriesManager() {
         `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/upload`,
         {
           method: "POST",
-          body: formData
+          body: formData,
+          // include auth cookie for protected upload route
+          credentials: "include"
         }
       );
 
@@ -153,7 +173,7 @@ export default function SuccessStoriesManager() {
   const saveStory = async (id) => {
     const story = stories.find((s) => s._id === id);
     if (!story?.name || !story?.title || !story?.description || !story?.image_url) {
-      toast.error("Please fill all fields");
+      notifyError("Please fill all fields");
       return;
     }
 
@@ -178,13 +198,13 @@ export default function SuccessStoriesManager() {
       if (res?.success) {
         const updated = res.data.map((s) => toViewModel(s));
         setStories(updated);
-        toast.success("Story saved successfully");
+        notifySuccess("Story saved successfully");
       } else {
-        toast.error(res?.message || "Failed to save story");
+        notifyError(res?.message || "Failed to save story");
       }
     } catch (error) {
       setLoading(false);
-      toast.error(error.message || "Failed to save story");
+      notifyError(error.message || "Failed to save story");
     }
   };
 
@@ -231,7 +251,7 @@ export default function SuccessStoriesManager() {
                 <div className="relative group">
                   {story.image_url ? (
                     <img
-                      src={story.image_url}
+                      src={buildImageSrc(story.image_url)}
                       alt={story.name}
                       className="w-full h-48 object-cover rounded-lg"
                     />

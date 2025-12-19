@@ -7,7 +7,6 @@ import {
   Menu,
   X
 } from 'lucide-react';
-import { toast, Toaster } from "sonner";
 import logo from '../assests/HomePage/Logo-WithoutBg.png';
 
 import ProjectsManager from './ProjectsManager';
@@ -82,8 +81,6 @@ export function AdminDashboard() {
       <div className={`fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out z-50 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       } lg:translate-x-0 overflow-y-auto`}>
-        <Toaster richColors position="top-right" />
-
         {/* Logo */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">

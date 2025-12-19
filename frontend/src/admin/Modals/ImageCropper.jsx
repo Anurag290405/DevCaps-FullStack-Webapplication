@@ -1,7 +1,6 @@
 import { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import { X } from "lucide-react";
-import { toast } from "sonner";
 
 export default function ImageCropper({ isOpen, imageSrc, onCropComplete, onClose }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -22,7 +21,7 @@ export default function ImageCropper({ isOpen, imageSrc, onCropComplete, onClose
 
   const handleSaveCrop = async () => {
     if (!croppedAreaPixels) {
-      toast.error("Please adjust the crop area");
+      alert("Please adjust the crop area");
       return;
     }
 
@@ -57,17 +56,17 @@ export default function ImageCropper({ isOpen, imageSrc, onCropComplete, onClose
           if (blob) {
             onCropComplete(blob);
             onClose();
-            toast.success("Image cropped successfully");
+            alert("Image cropped successfully");
           }
         }, "image/jpeg", 0.95);
       };
 
       image.onerror = () => {
-        toast.error("Failed to load image");
+        alert("Failed to load image");
       };
     } catch (error) {
       console.error("Cropping error:", error);
-      toast.error("Failed to crop image");
+      alert("Failed to crop image");
     }
   };
 

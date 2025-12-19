@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import GetProjects from "../../API's/ProjectAPI/GetProjects";
 import WebsiteLoader from "../../Loader/WebsiteLoader";
+import { API_URL } from "../../NwConfig";
 
 const ProjectCards = () => {
   const [projects, setProjects] = useState([]);
@@ -17,11 +18,11 @@ const ProjectCards = () => {
   const settings = {
     dots: false,
     infinite: projects.length > slidesToShow,
-    speed: 600,
+    speed: 2000,
     slidesToShow,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 9000,
     arrows: false,
     responsive: [
       { breakpoint: 1024, settings: { slidesToShow: 2 } },
@@ -38,6 +39,14 @@ const ProjectCards = () => {
     };
     load();
   }, []);
+
+  // Ensure images render whether the API returns relative or absolute URLs
+  const buildImageSrc = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+    const base = import.meta.env.VITE_API_URL || API_URL || "http://localhost:3000";
+    return `${base}/${path.replace(/^\//, "")}`;
+  };
 
   return (
     <div className="w-full bg-white py-12 overflow-hidden">
@@ -73,7 +82,7 @@ const ProjectCards = () => {
                 {/* Image */}
               <div className="w-[90%] h-60 mt-6 mx-auto rounded-2xl bg-white flex items-center justify-center overflow-hidden">
   <img
-    src={card.image}
+    src={buildImageSrc(card.image)}
     alt={card.name}
     className="w-full h-full object-contain"
   />

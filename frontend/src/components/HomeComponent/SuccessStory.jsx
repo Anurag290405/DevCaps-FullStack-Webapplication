@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import GetSuccessData from "../../API's/SuccessStoriesAPI/GetSuccessData";
-import parseImagePath from "../../admin/Modals/parseImagePath";
+import { API_URL } from "../../NwConfig";
 import WebsiteLoader from "../../Loader/WebsiteLoader";
 
 const SuccessStory = () => {
@@ -20,6 +20,14 @@ const SuccessStory = () => {
   useEffect(() => {
     getSuccessData();
   }, []);
+
+  // Build an absolute image URL (handles relative API paths)
+  const buildImageSrc = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+    const base = import.meta.env.VITE_API_URL || API_URL || "http://localhost:3000";
+    return `${base}/${path.replace(/^\//, "")}`;
+  };
 
   // Auto change every 2s
   useEffect(() => {
@@ -45,10 +53,7 @@ const SuccessStory = () => {
         <div className="flex flex-col md:flex-row items-center gap-8 max-w-6xl w-full">
           {/* Image */}
           <img
-            src={
-              parseImagePath(stories[current]?.image_url)
-                
-            }
+            src={buildImageSrc(stories[current]?.image_url)}
             alt={stories[current]?.name}
             className="w-64 h-72 md:w-72 md:h-80 rounded-2xl object-cover"
           />
