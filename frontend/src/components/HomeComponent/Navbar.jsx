@@ -65,8 +65,8 @@ const Navbar = () => {
             <button type="button" onClick={() => scrollToSection("home")} className={linkClass}>Home</button>
             <button type="button" onClick={() => scrollToSection("about")} className={linkClass}>About</button>
             <button type="button" onClick={() => scrollToSection("projects")} className={linkClass}>Projects</button>
-            <button type="button" onClick={() => scrollToSection("arrow")} className={linkClass}>Programs & Events</button>
-            <button type="button" onClick={() => scrollToSection("contact")} className={contactButtonClass}>
+            <button type="button" onClick={() => scrollToSection("home")} className={linkClass}>Programs & Events</button>
+            <button type="button" onClick={() => scrollToSection("home")} className={contactButtonClass}>
               <div className="p-2.5 bg-white rounded-[5px] inline-flex justify-center items-center gap-2.5">
                 <div className="justify-start text-black text-base font-medium font-['Montserrat']">
                   Contact

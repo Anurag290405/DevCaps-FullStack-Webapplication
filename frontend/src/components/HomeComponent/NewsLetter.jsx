@@ -80,7 +80,7 @@ const NewsLetter = () => {
               disabled={loading}
               className="h-12 px-6 lg:px-8 flex items-center justify-center bg-gradient-to-br from-[#267E5A] to-[#267E5A] text-white rounded-tr-md rounded-br-md font-['Poppins']"
             >
-              Subscribe →
+              Subscribe 
             </button>
           </div>
 

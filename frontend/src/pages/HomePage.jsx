@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Hero from "../components/HomeComponent/Hero";
 import About from "../components/HomeComponent/About";
-import image2 from "../assests/HomePage/image3.png";
-import image3 from "../assests/HomePage/image4.png";
-import image4 from "../assests/HomePage/image5.png";
+
 
 import ProjectCard from "../components/HomeComponent/ProjectCard";
-import Arrow from "../components/HomeComponent/Arrow";
 import SuccessStory from "../components/HomeComponent/SuccessStory";
 import NewsLetter from "../components/HomeComponent/NewsLetter";
 import { Link, useNavigate } from "react-router-dom";
@@ -76,35 +73,8 @@ console.log("called")
       {
         laoding && <WebsiteLoader />
       }
-      <div id="arrow">
-        <Arrow />
-      </div>
-      <div className="w-full py-6 px-4 flex flex-wrap justify-evenly bg-transparent">
-        {/* Logo 1 */}
-        {/* <img
-          src={image1}
-          alt="Partner 1"
-          className="w-24 sm:w-28 md:w-32 lg:w-40 h-auto object-contain"
-        /> */}
-        {/* Logo 2 */}
-        <img
-          src={image2}
-          alt="Partner 2"
-          className="w-24 sm:w-28 md:w-32 lg:w-40 h-auto object-contain"
-        />
-        {/* Logo 3 */}
-        <img
-          src={image3}
-          alt="Partner 3"
-          className="w-28 sm:w-32 md:w-36 lg:w-44 h-auto object-contain"
-        />
-        {/* Logo 4 */}
-        <img
-          src={image4}
-          alt="Partner 4"
-          className="w-28 sm:w-32 md:w-36 lg:w-44 h-auto object-contain"
-        />
-      </div>
+      
+      
 
    
   <div id="about" className="scroll-mt-24">

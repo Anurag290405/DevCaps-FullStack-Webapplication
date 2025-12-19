@@ -37,9 +37,10 @@ const Footer = () => {
     navigate(path);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
   return (
     <footer className="w-full bg-transparent text-white font-['Poppins'] border-t border-t-white/40">
-      <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row md:flex-wrap divide-y md:divide-y-0 md:divide-x divide-white/90 relative">
+      <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row md:flex-wrap relative divide-y md:divide-y-0">
         
         {/* LEFT SECTION - Company Info */}
         <LeftSection logo={logo} />
@@ -52,7 +53,6 @@ const Footer = () => {
 
         {/* MOBILE ONLY - Copyright at Bottom */}
         <MobileCopyright />
-
       </div>
     </footer>
   );
@@ -61,14 +61,14 @@ const Footer = () => {
 // LEFT SECTION: Logo & Contact Info
 const LeftSection = ({ logo }) => {
   return (
-    <div className="w-full md:w-[32%] py-6 sm:py-8 md:py-10 flex flex-col gap-6 sm:gap-8 md:gap-10 px-4 sm:px-6">
+    <div className="w-full md:w-1/3 md:border-r md:border-white/90 py-6 sm:py-8 md:py-10 flex flex-col gap-6 sm:gap-8 md:gap-10 px-4 sm:px-6">
       {/* Logo */}
       <div className="flex flex-col items-center justify-center md:justify-start">
         <img src={logo} alt="Logo" className="w-20 sm:w-24 md:w-28 h-auto" />
       </div>
 
       {/* Divider Line */}
-      <div className="w-full h-[1px] bg-white/90" />
+      <div className="w-full h-[1px] bg-white/90 md:hidden" />
 
       {/* Contact Information */}
       <div className="flex flex-col items-center md:items-start gap-3 sm:gap-4 text-xs sm:text-sm md:text-base">
@@ -106,7 +106,7 @@ const CenterSection = ({ scrollToSection }) => {
   ];
 
   return (
-    <div className="w-full md:w-[36%] py-6 sm:py-8 md:py-10 flex flex-col justify-between items-center text-xs sm:text-sm md:text-base px-4 sm:px-6">
+    <div className="w-full md:w-1/3 md:border-r md:border-white/90 py-6 sm:py-8 md:py-10 flex flex-col justify-between items-center text-xs sm:text-sm md:text-base px-4 sm:px-6">
       {/* Navigation Grid */}
       <div className="grid grid-cols-2 gap-y-3 gap-x-6 sm:gap-x-10 pb-6">
         {navLinks.map((link) => (
@@ -121,7 +121,7 @@ const CenterSection = ({ scrollToSection }) => {
       </div>
 
       {/* Divider Line */}
-      <div className="w-full h-[1px] bg-white/90" />
+      <div className="w-full h-[1px] bg-white/90 md:hidden" />
 
       {/* Copyright - Desktop Only */}
       <div className="hidden md:block mt-4 px-2 text-center text-white/80 text-[12px] leading-snug">
@@ -134,7 +134,7 @@ const CenterSection = ({ scrollToSection }) => {
 // RIGHT SECTION: Query & Social Links
 const RightSection = ({ navigateToPage, socialLinks }) => {
   return (
-    <div className="w-full md:w-[32%] px-4 sm:px-6 md:px-1 py-6 sm:py-8 md:py-10 flex flex-col gap-3 sm:gap-4 items-center">
+    <div className="w-full md:w-1/3 py-6 sm:py-8 md:py-10 flex flex-col gap-3 sm:gap-4 items-center">
       {/* Heading */}
       <div className="text-lg sm:text-xl md:text-2xl font-normal text-center">Have a Query?</div>
       <div className="text-base sm:text-lg md:text-xl font-normal text-center">Reach Out To Us!</div>

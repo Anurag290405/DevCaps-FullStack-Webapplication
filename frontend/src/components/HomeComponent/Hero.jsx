@@ -7,7 +7,6 @@ const heroContent = {
     "DevCaps is a dynamic innovation and incubation platform designed to empower developers, startups, and student entrepreneurs. We provide mentorship, technical guidance, industry exposure, and collaborative opportunities to transform ideas into scalable solutions. From early-stage validation to market-ready products, DevCaps supports innovation at every step."
 };
 
-
 const Hero = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -26,11 +25,21 @@ const Hero = () => {
     setError("");
   };
 
+  const validatePhone = (phone) => {
+    const phoneRegex = /^[0-9]{10}$/;
+    return phoneRegex.test(phone);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.name || !formData.email || !formData.phone) {
       setError("Please fill in all required fields");
+      return;
+    }
+
+    if (!validatePhone(formData.phone)) {
+      setError("Please enter a valid 10-digit phone number");
       return;
     }
 
@@ -67,17 +76,20 @@ const Hero = () => {
 
   return (
     <div className="relative w-full min-h-[600px] lg:min-h-[650px] bg-neutral-100 overflow-hidden">
-      <div className="relative max-w-[1512px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-10 px-6 lg:px-16 py-10 lg:py-16">
+      <div className="relative max-w-[1512px] mx-auto flex flex-col-reverse lg:flex-row items-center justify-between gap-10 px-6 lg:px-16 py-10 lg:py-16">
 
         {/* Left - Contact Form */}
-        <div className="w-full lg:w-5/12 bg-white rounded-2xl p-8 shadow-xl border border-gray-200">
-          <h3 className="text-2xl font-bold text-gray-800 mb-6">
+        <div
+          className="w-full lg:w-5/12 rounded-2xl p-6 sm:p-8 shadow-xl border border-black"
+          style={{ backgroundColor: "rgba(45, 84, 210, 0.1)" }} // #2D54D2 at 10% opacity
+        >
+          <h3 className="text-2xl font-bold text-gray-900 mb-6">
             Drop Your Query
           </h3>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 Full Name
               </label>
               <input
@@ -86,13 +98,13 @@ const Hero = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter your full name"
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                className="w-full px-4 py-3 rounded-lg bg-white border border-black text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-900 mb-2">
                   Email
                 </label>
                 <input
@@ -101,12 +113,12 @@ const Hero = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Enter email"
-                  className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-black text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-900 mb-2">
                   Contact No.
                 </label>
                 <input
@@ -115,13 +127,13 @@ const Hero = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="Enter valid phone no."
-                  className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-black text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 Message (optional)
               </label>
               <textarea
@@ -130,7 +142,7 @@ const Hero = () => {
                 onChange={handleChange}
                 placeholder="Describe your idea"
                 rows="4"
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
+                className="w-full px-4 py-3 rounded-lg bg-white border border-black text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black resize-none"
               />
             </div>
 
