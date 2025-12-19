@@ -1,5 +1,7 @@
-export const API_URL = ["http://localhost:3000" , "https://devcaps.onrender.com"];
-export const Frontend_API_URL = [ "http://localhost:5173" ,"https://devcapsbyanurag.vercel.app"];
+// export const API_URL = "http://localhost:3000";
+export const API_URL = "https://devcaps.onrender.com"
+// export const Frontend_API_URL = "http://localhost:5173";
+export const Frontend_API_URL = "https://devcapsbyanurag.vercel.app";
 
 // DevCaps endpoints
 export const projects = "/api/projects";
