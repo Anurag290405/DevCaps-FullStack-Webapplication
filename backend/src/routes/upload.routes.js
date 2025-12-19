@@ -1,10 +1,11 @@
 import express from "express";
 import upload from "../middlewares/imageUpload.middleware.js";
+import { verifyToken } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-// POST /api/upload - Upload cropped image
-router.post("/upload", upload.single("image"), (req, res) => {
+// POST /api/upload - Upload cropped image (protected)
+router.post("/upload", verifyToken, upload.single("image"), (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No image file provided" });

@@ -3,7 +3,7 @@ import { API_URL, projects } from "../../NwConfig";
 
 export default async function UpdateProject(id, payload) {
   try {
-    const response = await axios.put(`${API_URL + projects}/${id}`, payload);
+    const response = await axios.put(`${API_URL + projects}/${id}`, payload, { withCredentials: true });
     return response.data;
   } catch (error) {
     return { success: false, message: error.message };

@@ -1,17 +1,16 @@
-import axios from "axios"
-import { API_URL,logout} from "../../NwConfig"
+import axios from "axios";
+import { API_URL } from "../../NwConfig";
+
 export default async function Logout() {
-    try{
-        const url=API_URL+logout
-        const request=await axios.post(url,
-            { withCredentials: true }
-        )
-        const response=await request.data;
-        // console.log(response)
-        return response
-    }catch(error){
-        // console.log(error)
-        return error.message
-    }
-    
+  try {
+    const url = `${API_URL}/api/auth/logout`;
+    const response = await axios.post(url, {}, { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    console.error("Logout error:", error);
+    return {
+      success: false,
+      message: error.message
+    };
+  }
 }

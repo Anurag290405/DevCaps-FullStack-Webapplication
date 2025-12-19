@@ -5,12 +5,16 @@ import {
 	updateProject,
 	deleteProject
 } from "../controllers/project.controller.js";
+import { verifyToken } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.post("/projects", createProject);
+// Public route
 router.get("/projects", getProjects);
-router.put("/projects/:id", updateProject);
-router.delete("/projects/:id", deleteProject);
+
+// Protected admin routes
+router.post("/projects", verifyToken, createProject);
+router.put("/projects/:id", verifyToken, updateProject);
+router.delete("/projects/:id", verifyToken, deleteProject);
 
 export default router;

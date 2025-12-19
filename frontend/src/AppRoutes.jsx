@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AppLayout from './components/AppLayout';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Public Components
 import Home from './pages/HomePage';
@@ -21,10 +22,16 @@ const AppRoutes = () => {
   
       </Route>
 
-      {/* admin Routes */}
-      {/* <Route path="/login" element={<Login />} /> */}
-      <Route path="/admindashboard" element={<AdminDashboard />} />
+      {/* Admin Routes */}
       <Route path="/admin" element={<Login />} />
+      <Route 
+        path="/admindashboard" 
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        } 
+      />
     </Routes>
   );
 };

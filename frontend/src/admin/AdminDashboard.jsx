@@ -15,6 +15,7 @@ import ContactQueries from './ContactQueries';
 import NewsletterManager from './NewsletterManager';
 import SuccessStoriesManager from './SuccessStoriesManager';
 import Verify from '../API\'s/AdminAPI/Verify';
+import Logout from '../API\'s/AdminAPI/Logout';
 
 const navigationItems = [
   { id: 'projects', label: 'Projects', icon: Briefcase },
@@ -32,16 +33,21 @@ export function AdminDashboard() {
   useEffect(() => {
     const verifyAdmin = async () => {
       const res = await Verify();
-      if (res?.message === "Admin verified successfully") {
+      if (res?.success || res?.message === "Admin verified successfully") {
         setUserRole(res?.name || "Admin");
       }
     };
     verifyAdmin();
   }, []);
 
-  const logoutUser = () => {
-    window.localStorage.removeItem("35gntgij@3e#ed");
-    window.location.href = "/admin";
+  const logoutUser = async () => {
+    try {
+      await Logout();
+      window.location.href = "/admin";
+    } catch (error) {
+      console.error("Logout failed:", error);
+      window.location.href = "/admin";
+    }
   };
 
   const renderActiveSection = () => {

@@ -12,19 +12,22 @@ export function Login({ onLogin }) {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const success = await AdminLogin();
     
+    if (!email || !password) {
+      setError("Please enter both email and password");
+      setLoading(false);
+      return;
+    }
+
+    const success = await AdminLogin(email, password);
 
     if (!success?.success) {
-      setError("Invalid email or password.");
-    }
-    if (success?.success) {
-      window.localStorage.setItem("35gntgij@3e#ed", Date.now() + 86400000);
+      setError(success?.message || "Invalid email or password.");
+      setLoading(false);
+    } else {
       setLoading(false);
       window.location.href = "/admindashboard";
     }
-
-    setLoading(false);
   };
 
   return (

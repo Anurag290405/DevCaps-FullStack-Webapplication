@@ -3,8 +3,10 @@ import dotenv from "dotenv";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import cookieParser from "cookie-parser";
 
 import connectDb from "./src/config/db.js";
+import authRouter from "./src/routes/auth.routes.js";
 import projectsRouter from "./src/routes/projects.routes.js";
 import clientsRouter from "./src/routes/clients.routes.js";
 import contactRouter from "./src/routes/contact.routes.js";
@@ -23,6 +25,9 @@ app.use(cors({
   credentials: true
 }));
 
+// Parse cookies
+app.use(cookieParser());
+
 // Serve static files from uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
@@ -34,6 +39,10 @@ app.get("/", (_req, res) => {
   res.status(200).json({ message: "DevCaps backend is running" });
 });
 
+// Auth routes (public)
+app.use("/api/auth", authRouter);
+
+// Admin routes (protected)
 app.use("/api", projectsRouter);
 app.use("/api", clientsRouter);
 app.use("/api", contactRouter);
