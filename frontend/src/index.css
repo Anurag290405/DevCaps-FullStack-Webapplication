@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import "tailwindcss";
+
+/* Hide scrollbars universally for elements with this class */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;               /* Chrome/Safari */
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;    /* IE/Edge */
+  scrollbar-width: none;       /* Firefox */
+}
+
+/* Brand theme variables */
+:root {
+  --brand-primary: #2569AA;   /* blue */
+  --brand-secondary: #0F2A44; /* deep navy */
+  --brand-white: #ffffff;
+  --brand-button: #267E5A;    /* green */
+  --brand-button-hover: #1F6449;
+}
+
+/* Global gradient background */
+html, body, #root { min-height: 100%; }
+body {
+  background: linear-gradient(180deg, var(--brand-secondary) 0%, var(--brand-primary) 70%, var(--brand-white) 100%);
+}
+
+/* Utility classes */
+.bg-app-gradient {
+  background: linear-gradient(180deg, var(--brand-secondary) 0%, var(--brand-primary) 100%);
+}
+
+.btn-primary {
+  background-color: var(--brand-button);
+  color: var(--brand-white);
+}
+.btn-primary:hover { background-color: var(--brand-button-hover); }
