@@ -134,13 +134,13 @@ export default function SuccessStoriesManager() {
     const story = stories.find((s) => s._id === id);
     if (!story || `${story._id}`.startsWith("temp")) {
       setStories((prev) => prev.filter((s) => s._id !== id));
-    notifySuccess("Story deleted");
-    return;
-  }
+      notifySuccess("Story deleted");
+      return;
+    }
 
-  setLoading(true);
-  setStories((prev) => prev.filter((s) => s._id !== id));
-  notifySuccess("Story deleted");
+    // Delete from local state immediately for better UX
+    setStories((prev) => prev.filter((s) => s._id !== id));
+    notifySuccess("Story deleted");
   };
 
   const uploadImage = async (blob) => {
